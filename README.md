@@ -7,11 +7,11 @@
 [![React Version](https://img.shields.io/badge/React-18.x-61DAFB?style=for-the-badge&logo=react&logoColor=white)](https://reactjs.org/)
 [![LLM Powered](https://img.shields.io/badge/LLM-Powered-FF6F00?style=for-the-badge&logo=openai&logoColor=white)](https://github.com/dercyc/autotransaction)
 
-[Features](#-features) • 
-[Architecture](#%EF%B8%8F-architecture) • 
-[Installation](#-installation) • 
-[Documentation](#-documentation) • 
-[Roadmap](#-roadmap) • 
+[Features](#-features) •
+[Architecture](#%EF%B8%8F-architecture) •
+[Installation](#-installation) •
+[Documentation](#-documentation) •
+[Roadmap](#-roadmap) •
 [License](#-license)
 
 </div>
@@ -45,6 +45,7 @@ AutoTrade is a comprehensive multi-platform automated trading system that integr
 The system consists of the following key components:
 
 ### Backend Core (Go)
+
 - **Market Data Service**: Collects and processes real-time market data
 - **Strategy Manager**: Manages and executes trading strategies
 - **Risk Manager**: Monitors and controls trading risks
@@ -52,10 +53,12 @@ The system consists of the following key components:
 - **LLM Service**: Provides AI-powered analysis and recommendations
 
 ### Blockchain Integration (Solidity)
+
 - **Auto-Trade Contracts**: Smart contracts for on-chain trading
 - **Multi-DEX Support**: Integration with various decentralized exchanges
 
 ### Frontend Interface (React)
+
 - **Trading Dashboard**: Real-time portfolio and performance view
 - **Strategy Management & AI Optimization**: Configure and optimize strategies
 - **Trade History & Analytics**: Historical performance visualization
@@ -116,24 +119,28 @@ The system consists of the following key components:
 ### Backend Setup
 
 1. Clone the repository
+
 ```bash
 git clone https://github.com/dercyc/autotransaction.git
 cd autotransaction
 ```
 
 2. Configure the environment
+
 ```bash
 cp configs/config.example.yaml configs/config.yaml
 # Edit config.yaml to set up trading parameters, API keys, and blockchain configuration
 ```
 
 3. Build and run
+
 ```bash
 go build -o autotrade cmd/main.go
 ./autotrade
 ```
 
 Alternatively, run directly:
+
 ```bash
 go run cmd/main.go
 ```
@@ -141,17 +148,20 @@ go run cmd/main.go
 ### Smart Contract Deployment
 
 1. Install dependencies
+
 ```bash
 cd dapp-autotrade/contracts
 npm install
 ```
 
 2. Compile contracts
+
 ```bash
 npx hardhat compile
 ```
 
 3. Deploy contracts (choose network as needed)
+
 ```bash
 npx hardhat run scripts/deploy.js --network ethereum  # Deploy to Ethereum
 # or
@@ -161,23 +171,27 @@ npx hardhat run scripts/deploy.js --network bsc       # Deploy to BSC
 ### Frontend Application
 
 1. Install dependencies
+
 ```bash
 cd dapp-autotrade/frontend
 npm install
 ```
 
 2. Configure environment variables
+
 ```bash
 cp .env.example .env
 # Edit .env to set the backend API address and contract addresses
 ```
 
 3. Start development server
+
 ```bash
 npm start
 ```
 
 4. Build for production
+
 ```bash
 npm run build
 ```
@@ -311,13 +325,13 @@ The system is designed with a modular architecture that makes it easy to extend 
 
 ## 📈 Roadmap
 
-- [x] Core architecture and functionality
-- [x] Moving Average Crossover strategy implementation
-- [x] Ethereum blockchain integration
-- [x] Basic UI implementation
-- [x] LLM service integration
-- [x] AI market analysis dashboard
-- [x] Trading assistant chat interface
+- [X] Core architecture and functionality
+- [X] Moving Average Crossover strategy implementation
+- [X] Ethereum blockchain integration
+- [X] Basic UI implementation
+- [X] LLM service integration
+- [X] AI market analysis dashboard
+- [X] Trading assistant chat interface
 - [ ] Strategy optimization improvements
 - [ ] Support for more blockchain platforms
 - [ ] Additional strategy templates
@@ -339,14 +353,7 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-## 📞 Contact
-
-- **Developer**: DercyC
-- **GitHub**: [github.com/dercyc](https://github.com/dercyc)
-- **Email**: [example@example.com](mailto:example@example.com)
-
----
 
 <div align="center">
-  <sub>Built with ❤️ by DercyC</sub>
+  <sub>Built with ❤️ by Dercy</sub>
 </div>
