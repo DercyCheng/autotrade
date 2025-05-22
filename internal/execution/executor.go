@@ -6,9 +6,10 @@ import (
 	"sync"
 	"time"
 
-	"github.com/dercyc/autotransaction/config"
-	"github.com/dercyc/autotransaction/internal/risk"
-	"github.com/dercyc/autotransaction/internal/strategy"
+	"autotransaction/config"
+	"autotransaction/internal/risk"
+	"autotransaction/internal/strategy"
+
 	"github.com/shopspring/decimal"
 	"github.com/sirupsen/logrus"
 )

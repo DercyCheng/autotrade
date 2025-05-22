@@ -4,7 +4,8 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/dercyc/autotransaction/internal/llm"
+	"autotransaction/internal/llm"
+
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 )

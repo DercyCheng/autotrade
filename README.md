@@ -5,7 +5,7 @@
 [![Go Version](https://img.shields.io/badge/Go-1.19+-00ADD8?style=for-the-badge&logo=go&logoColor=white)](https://golang.org/)
 [![Solidity Version](https://img.shields.io/badge/Solidity-0.8.x-363636?style=for-the-badge&logo=solidity&logoColor=white)](https://soliditylang.org/)
 [![React Version](https://img.shields.io/badge/React-18.x-61DAFB?style=for-the-badge&logo=react&logoColor=white)](https://reactjs.org/)
-[![LLM Powered](https://img.shields.io/badge/LLM-Powered-FF6F00?style=for-the-badge&logo=openai&logoColor=white)](https://github.com/dercyc/autotransaction)
+[![LLM Powered](https://img.shields.io/badge/LLM-Powered-FF6F00?style=for-the-badge&logo=openai&logoColor=white)](https://autotransaction)
 
 [Features](#-features) •
 [Architecture](#%EF%B8%8F-architecture) •
@@ -121,7 +121,7 @@ The system consists of the following key components:
 1. Clone the repository
 
 ```bash
-git clone https://github.com/dercyc/autotransaction.git
+git clone https://autotransaction.git
 cd autotransaction
 ```
 

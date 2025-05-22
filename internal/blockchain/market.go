@@ -7,8 +7,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/dercyc/autotransaction/config"
-	"github.com/dercyc/autotransaction/internal/market"
+	"autotransaction/config"
+	"autotransaction/internal/market"
+
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/shopspring/decimal"

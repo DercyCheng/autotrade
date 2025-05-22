@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/dercyc/autotransaction/config"
+	"autotransaction/config"
 )
 
 // LLMService 提供大型语言模型服务

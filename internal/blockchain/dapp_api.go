@@ -8,7 +8,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/dercyc/autotransaction/config"
+	"autotransaction/config"
+
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
 	"github.com/sirupsen/logrus"
@@ -454,4 +455,15 @@ func (s *DAppAPIServer) getSystemStatus(c *gin.Context) {
 			},
 		},
 	})
+}
+
+// RegisterMetricsHandler 注册Prometheus指标处理器
+func (s *DAppAPIServer) RegisterMetricsHandler(handler http.Handler) error {
+	// 添加指标路由
+	s.router.GET("/metrics", func(c *gin.Context) {
+		handler.ServeHTTP(c.Writer, c.Request)
+	})
+
+	logrus.Info("Prometheus指标端点已注册在 /metrics")
+	return nil
 }

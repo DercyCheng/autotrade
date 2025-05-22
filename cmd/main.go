@@ -1,18 +1,21 @@
 package main
 
 import (
-	"fmt"
+	"context"
 	"os"
 	"os/signal"
 	"syscall"
 
-	"github.com/dercyc/autotransaction/config"
-	"github.com/dercyc/autotransaction/internal/blockchain"
-	"github.com/dercyc/autotransaction/internal/execution"
-	"github.com/dercyc/autotransaction/internal/llm"
-	"github.com/dercyc/autotransaction/internal/market"
-	"github.com/dercyc/autotransaction/internal/risk"
-	"github.com/dercyc/autotransaction/internal/strategy"
+	"autotransaction/config"
+	"autotransaction/internal/blockchain"
+	"autotransaction/internal/execution"
+	"autotransaction/internal/llm"
+	"autotransaction/internal/market"
+	"autotransaction/internal/risk"
+	"autotransaction/internal/strategy"
+
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/sirupsen/logrus"
 )
 
@@ -20,38 +23,72 @@ func main() {
 	// 加载配置
 	cfg, err := config.LoadConfig("./configs/config.yaml")
 	if err != nil {
-		fmt.Printf("加载配置失败: %v\n", err)
-		os.Exit(1)
+		logrus.WithFields(logrus.Fields{
+			"error": err,
+			"file":  "./configs/config.yaml",
+		}).Fatal("加载配置失败")
 	}
 
 	// 设置日志级别
 	setLogLevel(cfg.System.LogLevel)
 
-	// 初始化各个模块
+	// 初始化上下文和取消函数
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	// 使用ctx初始化各个模块
 	marketData := market.NewMarketDataService(cfg)
 	riskManager := risk.NewRiskManager(cfg)
 	strategyManager := strategy.NewStrategyManager(cfg, marketData)
 	executor := execution.NewExecutor(cfg, riskManager)
 
+	// 将上下文传递给需要的模块（示例）
+	go func() {
+		<-ctx.Done()
+		logrus.Info("检测到上下文取消信号")
+	}()
+
 	// 初始化区块链组件
 	blockchainMarket, err := blockchain.NewBlockchainMarketDataService(cfg)
 	if err != nil {
-		logrus.Fatalf("初始化区块链市场数据服务失败: %v", err)
+		logrus.WithFields(logrus.Fields{
+			"error":  err,
+			"module": "blockchainMarket",
+		}).Fatal("初始化区块链市场数据服务失败")
 	}
 
 	blockchainExecutor, err := blockchain.NewBlockchainExecutor(cfg, riskManager)
 	if err != nil {
-		logrus.Fatalf("初始化区块链交易执行器失败: %v", err)
+		logrus.WithFields(logrus.Fields{
+			"error":  err,
+			"module": "blockchainExecutor",
+		}).Fatal("初始化区块链交易执行器失败")
 	}
 
 	// 初始化LLM服务
 	llmService := llm.NewLLMService(cfg)
+
+	// 初始化Prometheus监控
+	prometheusRegistry := prometheus.NewRegistry()
+	prometheusRegistry.MustRegister(
+		prometheus.NewGoCollector(),
+		prometheus.NewProcessCollector(prometheus.ProcessCollectorOpts{}),
+	)
 
 	// 初始化LLM控制器
 	llmController := blockchain.NewLLMController(llmService)
 
 	// 初始化DApp API服务器
 	dappServer := blockchain.NewDAppAPIServer(cfg, blockchainExecutor, blockchainMarket, llmController)
+
+	// 注册Prometheus指标端点
+	err = dappServer.RegisterMetricsHandler(promhttp.HandlerFor(
+		prometheusRegistry,
+		promhttp.HandlerOpts{EnableOpenMetrics: true},
+	))
+	if err != nil {
+		logrus.WithError(err).Fatal("注册监控指标端点失败")
+	}
 
 	// 启动市场数据服务
 	if err := marketData.Start(); err != nil {

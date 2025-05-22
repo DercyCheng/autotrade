@@ -3,8 +3,9 @@ package risk
 import (
 	"sync"
 
-	"github.com/dercyc/autotransaction/config"
-	"github.com/dercyc/autotransaction/internal/strategy"
+	"autotransaction/config"
+	"autotransaction/internal/strategy"
+
 	"github.com/shopspring/decimal"
 	"github.com/sirupsen/logrus"
 )

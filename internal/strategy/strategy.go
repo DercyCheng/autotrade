@@ -5,8 +5,9 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/dercyc/autotransaction/config"
-	"github.com/dercyc/autotransaction/internal/market"
+	"autotransaction/config"
+	"autotransaction/internal/market"
+
 	"github.com/shopspring/decimal"
 	"github.com/sirupsen/logrus"
 )

@@ -5,7 +5,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/dercyc/autotransaction/config"
+	"autotransaction/config"
+
 	"github.com/shopspring/decimal"
 	"github.com/sirupsen/logrus"
 )
