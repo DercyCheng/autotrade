@@ -1,0 +1,53 @@
+# 开发环境模拟配置
+
+# 交易所模拟配置
+exchange:
+  name: "binance" # 交易所名称
+  api_key: "mock_api_key"
+  api_secret: "mock_api_secret"
+  base_url: "http://localhost:8080/mock" # 模拟API端点
+  mock_mode: true # 启用模拟模式
+
+# 区块链配置
+blockchain:
+  enabled: true # 启用区块链模块
+  mock_mode: true # 使用模拟模式
+  networks:
+    - name: "ethereum"
+      chain_id: 5 # Goerli测试网
+      rpc_url: "https://goerli.infura.io/v3/YOUR_INFURA_KEY"
+      ws_url: "wss://goerli.infura.io/ws/v3/YOUR_INFURA_KEY"
+      enabled: true
+      private_key: "YOUR_TESTNET_PRIVATE_KEY" # 需要替换为测试网私钥
+
+# 交易对设置
+trading:
+  pairs:
+    - symbol: "BTC/USDT"
+      enabled: true
+    - symbol: "ETH/USDT"
+      enabled: true
+  base_currency: "USDT"
+
+# 策略参数
+strategy:
+  name: "moving_average_crossover" # 策略名称
+  params:
+    short_period: 5 # 短期移动平均线周期
+    long_period: 20 # 长期移动平均线周期
+    interval: "1h" # 数据时间间隔
+  mock_data: true # 使用模拟数据
+
+# 风险控制参数
+risk:
+  max_position_size: 0.1 # 单个交易对最大仓位比例
+  stop_loss: 0.05 # 止损比例
+  take_profit: 0.1 # 止盈比例
+  max_open_positions: 3 # 最大同时持仓数量
+
+# 系统设置 - 开发模式
+system:
+  log_level: "debug" # 开发环境使用详细日志
+  data_dir: "./data/mock" # 模拟数据存储目录
+  backtest_mode: true # 启用回测模式
+  dapp_port: 3001 # 使用不同端口避免冲突

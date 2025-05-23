@@ -3,8 +3,8 @@
 # 交易所API配置
 exchange:
   name: "binance" # 交易所名称
-  api_key: "your_api_key_here"
-  api_secret: "your_api_secret_here"
+  api_key: "mock_api_key_123"
+  api_secret: "mock_api_secret_456"
   base_url: "https://api.binance.com"
 
 # 区块链配置
@@ -24,7 +24,7 @@ blockchain:
       gas_price: "5gwei"
   contracts:
     trading_contract: "0x..." # 智能交易合约地址
-    wallet_private_key: "your_private_key_here" # 用于签名交易的私钥
+    wallet_private_key: "4f3edf983ac636a65a842ce7c78d9aa706d3b113bce9c46f30d7d21715b23b1d" # 测试用私钥
 
 # 交易对设置
 trading:

@@ -1,0 +1,11 @@
+fastapi==0.109.1
+uvicorn==0.27.0
+grpcio==1.62.0
+grpcio-tools==1.62.0
+protobuf==4.25.2
+transformers==4.38.2
+torch==2.2.0
+huggingface-hub==0.20.3
+mlx==0.0.14  # Apple M1/M2优化
+sentencepiece==0.2.0
+accelerate==0.27.2

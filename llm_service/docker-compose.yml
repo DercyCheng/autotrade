@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  llm-service:
+    build: .
+    platform: linux/arm64  # 针对M1 Pro优化
+    environment:
+      - PYTHONUNBUFFERED=1
+      - HF_HUB_ENABLE_HF_TRANSFER=1  # 加速模型下载
+    volumes:
+      - ./models:/app/models  # 持久化模型数据
+    ports:
+      - "8000:8000"  # HTTP API
+      - "50051:50051"  # GRPC
+    deploy:
+      resources:
+        limits:
+          cpus: '4'
+          memory: 8G
+    restart: unless-stopped
+    command: >
+      sh -c "python src/main.py"

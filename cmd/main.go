@@ -48,23 +48,6 @@ func main() {
 		logrus.Info("检测到上下文取消信号")
 	}()
 
-	// 初始化区块链组件
-	blockchainMarket, err := blockchain.NewBlockchainMarketDataService(cfg)
-	if err != nil {
-		logrus.WithFields(logrus.Fields{
-			"error":  err,
-			"module": "blockchainMarket",
-		}).Fatal("初始化区块链市场数据服务失败")
-	}
-
-	blockchainExecutor, err := blockchain.NewBlockchainExecutor(cfg, riskManager)
-	if err != nil {
-		logrus.WithFields(logrus.Fields{
-			"error":  err,
-			"module": "blockchainExecutor",
-		}).Fatal("初始化区块链交易执行器失败")
-	}
-
 	// 初始化LLM服务
 	llmService := llm.NewLLMService(cfg)
 
@@ -78,8 +61,46 @@ func main() {
 	// 初始化LLM控制器
 	llmController := blockchain.NewLLMController(llmService)
 
-	// 初始化DApp API服务器
-	dappServer := blockchain.NewDAppAPIServer(cfg, blockchainExecutor, blockchainMarket, llmController)
+	var (
+		blockchainMarket   *blockchain.BlockchainMarketDataService
+		blockchainExecutor *blockchain.BlockchainExecutor
+		dappServer         *blockchain.DAppAPIServer
+	)
+
+	// 检查是否有启用的区块链网络
+	hasEnabledNetwork := false
+	for _, network := range cfg.Blockchain.Networks {
+		if network.Enabled {
+			hasEnabledNetwork = true
+			break
+		}
+	}
+
+	if hasEnabledNetwork {
+		logrus.Info("初始化区块链组件...")
+
+		var err error
+		blockchainMarket, err = blockchain.NewBlockchainMarketDataService(cfg)
+		if err != nil {
+			logrus.WithFields(logrus.Fields{
+				"error":  err,
+				"module": "blockchainMarket",
+			}).Fatal("初始化区块链市场数据服务失败")
+		}
+
+		blockchainExecutor, err = blockchain.NewBlockchainExecutor(cfg, riskManager)
+		if err != nil {
+			logrus.WithFields(logrus.Fields{
+				"error":  err,
+				"module": "blockchainExecutor",
+			}).Fatal("初始化区块链交易执行器失败")
+		}
+
+		dappServer = blockchain.NewDAppAPIServer(cfg, blockchainExecutor, blockchainMarket, llmController)
+	} else {
+		logrus.Info("区块链组件已禁用")
+		dappServer = blockchain.NewDAppAPIServer(cfg, nil, nil, llmController)
+	}
 
 	// 注册Prometheus指标端点
 	err = dappServer.RegisterMetricsHandler(promhttp.HandlerFor(
@@ -105,15 +126,6 @@ func main() {
 		logrus.Fatalf("启动交易执行器失败: %v", err)
 	}
 
-	// 启动区块链服务
-	if err := blockchainMarket.Start(); err != nil {
-		logrus.Fatalf("启动区块链市场数据服务失败: %v", err)
-	}
-
-	if err := blockchainExecutor.Start(); err != nil {
-		logrus.Fatalf("启动区块链交易执行器失败: %v", err)
-	}
-
 	// 启动DApp API服务器
 	go func() {
 		if err := dappServer.Start(); err != nil {
@@ -131,8 +143,6 @@ func main() {
 	// 优雅关闭
 	logrus.Info("正在关闭自动交易系统...")
 	dappServer.Stop()
-	blockchainExecutor.Stop()
-	blockchainMarket.Stop()
 	executor.Stop()
 	strategyManager.Stop()
 	marketData.Stop()
